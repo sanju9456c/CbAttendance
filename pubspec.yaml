@@ -56,6 +56,8 @@ dependencies:
   flutter_svg: ^0.19.3
   flutter_svg_provider: ^0.1.8
   shared_preferences:
+  email_validator: ^2.1.17
+  restart_app: ^1.1.0+1
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -24,6 +26,7 @@ class _ScanScreenState extends State<ScanScreen>  {
   var qrstr = " ";
   bool scanButtonDisable=true;
   bool submitButtonDisable=false;
+  bool isLoading = false;
 
   bool checkboxImageDisable=false;
   bool scanImageDisable=false;
@@ -168,7 +171,7 @@ class _ScanScreenState extends State<ScanScreen>  {
                     ),
                   ),
                   onSubmitted: (String value){
-                    if (double.parse(value)>= 90 && double.parse(value) <=100) {
+                    if (double.parse(value)>= 90 && double.parse(value) <100) {
                       checkboxImageDisable = true;
                       hightemp=false;
                       print("check range temperature");
@@ -190,7 +193,7 @@ class _ScanScreenState extends State<ScanScreen>  {
                         checkboxImageDisable=false;
                         hightemp=false;
                       }
-                      else if (int.parse(value) >= 90 && int.parse(value) <=100) {
+                      else if (int.parse(value) >= 90 && int.parse(value) <100) {
                         checkboxImageDisable = true;
                         hightemp=false;
                         print("check range temperature");
@@ -352,10 +355,10 @@ class _ScanScreenState extends State<ScanScreen>  {
                       setState(()=>submitButtonDisable=false);
                       await saveAttendanceData();
                       await saveTodayDate();
-                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>LastScreen()));
                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>LastScreen()),(route) => false);
+                    }:null, child: Text("DONE",style: TextStyle(fontFamily:'Montserrat',fontStyle: FontStyle.normal ,color: const Color(0xFFF6EEE3),fontWeight: FontWeight.w700,fontSize: 16),),
+                ),
 
-                    }:null, child: Text("DONE",style: TextStyle(fontFamily:'Montserrat',fontStyle: FontStyle.normal ,color: const Color(0xFFF6EEE3),fontWeight: FontWeight.w700,fontSize: 16),)),
               ],
             ),
           ),
@@ -365,11 +368,9 @@ class _ScanScreenState extends State<ScanScreen>  {
   }
 
   String _data;
-
-
   Future _fetchPost() async  {
     print('print 1');
-    http.Response response = await http.get(Uri.parse("https://cbattendanceapp.herokuapp.com/qrcode/uniqueId"));
+    http.Response response = await http.get(Uri.parse("https://attendance-application-spring.herokuapp.com/qrcode/uniqueId"));
     setState(() {
       _data = jsonEncode(response.body.toString());
       print("api data is: "+_data.toString());
@@ -390,7 +391,6 @@ class _ScanScreenState extends State<ScanScreen>  {
         });
 
         print("qrcode data is "+_data.toString());
-
 
         if(value=="-1") {
           failqrcode=false;
@@ -444,9 +444,10 @@ class _ScanScreenState extends State<ScanScreen>  {
     print("check store data in dateformat :$date");
   }
 
-
-
   Future saveAttendanceData() async {
+    showDialog(context: context, builder:(context){
+      return Center(child: CircularProgressIndicator(color: Colors.brown,));
+    });
     print("check save data in database or not ");
     Position position = await _getGeoLocationPosition();
     data =  http.post(Uri.parse("https://cbattendanceapp.herokuapp.com/attendance/save"), headers:<String,String>{
@@ -461,6 +462,7 @@ class _ScanScreenState extends State<ScanScreen>  {
     ).then((response) => print(response.body)).catchError((error) => print(error));
     print('json data : '+data.toString());
     print("save data in json format");
+    Navigator.of(context).pop();
   }
 
   Widget _buildPopupDialog(BuildContext context) {
