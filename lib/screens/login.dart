@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'package:attendanceapp/main.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'FirstScreen.dart';
@@ -50,13 +51,16 @@ class _SignInDemoState extends State<SignInDemo> {
   }
   @override
   Widget build(BuildContext context) {
+
+    print('name is $_currentUser');
     if(_currentUser!=null) {
       readStoreData().then((value) async {
+        print("name inside currentuser$_currentUser");
         if(today==storeDate){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LastScreen()));
         }
         else {
-          if(_currentUser.email.toLowerCase().endsWith('coffeebeans.io')) {
+          if(_currentUser.email.toLowerCase().endsWith('@coffeebeans.io')) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FirstScreen()));
             Position position = await _getGeoLocationPosition();
             location =
@@ -65,10 +69,12 @@ class _SignInDemoState extends State<SignInDemo> {
           }
           else {
             showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
+            await _googleSignIn.signOut();
           }
         }
       });
     }
+
     else {
       return Scaffold(
         body: Stack(
@@ -109,12 +115,10 @@ class _SignInDemoState extends State<SignInDemo> {
                           fixedSize: const Size(330, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4),
-
                           )),
                       onPressed: () async {
                         await _handleSignIn();
-                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (
-                        //     context) => FirstScreen()));
+
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -127,7 +131,6 @@ class _SignInDemoState extends State<SignInDemo> {
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                             color: const Color(0xFF757575),
-
                           ),),
                           // <-- Text
                           SizedBox(
@@ -145,7 +148,6 @@ class _SignInDemoState extends State<SignInDemo> {
       );
     }
   }
-
   Future<Position> _getGeoLocationPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -155,14 +157,13 @@ class _SignInDemoState extends State<SignInDemo> {
       return Future.error('Location services are disabled.');
     }
     permission = await Geolocator.checkPermission();
-
     if (permission == LocationPermission.denied) {
 
       permission = await Geolocator.requestPermission();
 
       if (permission == LocationPermission.denied) {
         print("permission denied by user");
-        // return showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
+        return showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
 
         return Future.error('Location permissions are denied');
       }
@@ -188,7 +189,9 @@ class _SignInDemoState extends State<SignInDemo> {
 
   Future<void> _handleSignIn() async {
     try {
+      print("check login page");
       await _googleSignIn.signIn();
+
 
       // Position position = await _getGeoLocationPosition();
       // location =
@@ -216,9 +219,10 @@ class _SignInDemoState extends State<SignInDemo> {
         ],
       ),
       actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
+        ElevatedButton(
+          onPressed: () async {
+            // Navigator.of(context).pop();
+            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignInDemo()));
 
           },
           child: const Text('Close'),
@@ -226,4 +230,7 @@ class _SignInDemoState extends State<SignInDemo> {
       ],
     );
   }
+
+
+
 }

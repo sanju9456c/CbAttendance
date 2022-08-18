@@ -20,10 +20,6 @@
             "package_name": "io.coffeebeans.attendanceapp",
             "certificate_hash": "8c1985c72d512f524ba561e675d20c670b567e45"
           }
-        },
-        {
-          "client_id": "920194212184-r5s2ehak59a62389nb1bk2os00jj68ah.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -35,8 +31,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "920194212184-6sgu8dqmcnqp428fd4sdp5598kaa3t7j.apps.googleusercontent.com",
+              "client_id": "920194212184-19v6i05h9f8ghh6fgrg343lqbal7elsp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "920194212184-vsrnubsh5gjgd2viriv3nl0uucp2d4lf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.coffeebeans.attendanceapp"
+              }
             }
           ]
         }
@@ -57,10 +60,6 @@
             "package_name": "io.coffeebeans.coffeebeansattendanceapp",
             "certificate_hash": "c4ac4ed87bdd5b1a5e37dcc77b313d2b2b395090"
           }
-        },
-        {
-          "client_id": "920194212184-r5s2ehak59a62389nb1bk2os00jj68ah.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -72,8 +71,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "920194212184-6sgu8dqmcnqp428fd4sdp5598kaa3t7j.apps.googleusercontent.com",
+              "client_id": "920194212184-19v6i05h9f8ghh6fgrg343lqbal7elsp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "920194212184-vsrnubsh5gjgd2viriv3nl0uucp2d4lf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.coffeebeans.attendanceapp"
+              }
             }
           ]
         }

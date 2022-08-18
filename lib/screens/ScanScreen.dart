@@ -5,12 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:ai_barcode_scanner/ai_barcode_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import 'LastScreen.dart';
 GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['profile', 'email']);
@@ -25,6 +28,7 @@ class _ScanScreenState extends State<ScanScreen>  {
   GoogleSignInAccount _currentUser;
   var qrstr = " ";
   bool scanButtonDisable=true;
+  var result;
   bool submitButtonDisable=false;
   bool isLoading = false;
 
@@ -278,7 +282,25 @@ class _ScanScreenState extends State<ScanScreen>  {
               children: [
                 Container(
                   margin: EdgeInsets.only(top:470),
-                  child: ElevatedButton(
+                  child:
+                  // ElevatedButton(
+                  //   onPressed: ()  {
+                  //     // var res = await Navigator.push(
+                  //     //     context,
+                  //     //     MaterialPageRoute(
+                  //     //       builder: (context) => const SimpleBarcodeScannerPage(),
+                  //     //     ));
+                  //     // setState(() {
+                  //     //   if (res is String) {
+                  //     //     result = res;
+                  //     //     print("reading value is $result");
+                  //     //   }
+                  //     // });
+                  //   },
+                  //   child: const Text('Open Scanner'),
+                  // ),
+
+                  ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: const Color(  0xFFE9CFAB),
                         fixedSize: const Size(150, 50),
@@ -290,7 +312,8 @@ class _ScanScreenState extends State<ScanScreen>  {
                         scanQr();
                       }:null,
                       child:
-                      Text(scanButtonDisable ? ('SCAN') : ('SCANNED'),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16,  color: scanButtonDisable ? const Color(0xFF654113):const Color(0xFFC0A17A),),)),
+                      Text(scanButtonDisable ? ('SCAN') : ('SCANNED'),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16,  color: scanButtonDisable ? const Color(0xFF654113):const Color(0xFFC0A17A),),)
+                  ),
                 ),
               ],
             ),
@@ -369,34 +392,45 @@ class _ScanScreenState extends State<ScanScreen>  {
 
   String _data;
   Future _fetchPost() async  {
-    print('print 1');
-    http.Response response = await http.get(Uri.parse("https://attendance-application-spring.herokuapp.com/qrcode/uniqueId"));
-    setState(() {
-      _data = jsonEncode(response.body.toString());
-      print("api data is: "+_data.toString());
+    try {
+      print('print 1');
+      http.Response response = await http.get(Uri.parse("https://attendance-application-spring.herokuapp.com/qrcode/uniqueId"));
+      setState(() {
+        _data = jsonEncode(response.body.toString());
+        print("api data is: "+_data.toString());
 
-    });
-    return "Success";
+      });
+      return "Success";
+
+    }
+    catch(error) {
+      print(error);
+    }
+
   }
 
 
   Future <void>scanQr()async{
     try {
-
-      FlutterBarcodeScanner.scanBarcode('#2A99CF', 'cancel', true, ScanMode.QR)
-          .then((value) async {
-        setState(() {
-
-          print("camera reading value is :  $value");
-        });
+      var res = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SimpleBarcodeScannerPage(),
+          ));
+      setState(() {
+        if (res is String) {
+          result = res;
+          print("reading value is $res");
+        }
+      });
 
         print("qrcode data is "+_data.toString());
 
-        if(value=="-1") {
+        if(result=="-1") {
           failqrcode=false;
           Text(qrstr=" ");
         }
-        else if(value==_data) {
+        else if(result==_data) {
           print("main qrcode string");
           scanButtonDisable=false;
           scanImageDisable=true;
@@ -404,11 +438,11 @@ class _ScanScreenState extends State<ScanScreen>  {
           Text(qrstr=" ");
           // scanImageDisable=!scanImageDisable;
         }
-        else if(value!=_data) {
+        else if(result!=_data) {
           await _fetchPost();
           print("update string value");
           print("new api string :"+_data);
-          if(value==_data){
+          if(result==_data){
             scanButtonDisable=false;
             scanImageDisable=true;
             failqrcode=false;
@@ -426,14 +460,15 @@ class _ScanScreenState extends State<ScanScreen>  {
           submitButtonDisable=false;
           failqrcode=true;
         }
-      });
-    }
+      }
     catch(e){
+      print(e);
       setState(() {
         qrstr='unable to read this';
       });
     }
   }
+
 
 
   Future<void> saveTodayDate() async {

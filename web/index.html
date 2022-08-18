@@ -14,10 +14,40 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.9.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBQtLb8pjHDWbOgzhUxB2Q_0q_PPPQ4rPY",
+    authDomain: "attendance-b921d.firebaseapp.com",
+    projectId: "attendance-b921d",
+    storageBucket: "attendance-b921d.appspot.com",
+    messagingSenderId: "920194212184",
+    appId: "1:920194212184:web:95d85a7255d234da31052d",
+    measurementId: "G-NG0X529VW9"
+  };
+
+  // Initialize Firebase
+  try {
+
+  console.log("Initializing");
+  const app = initializeApp(firebaseConfig);
+  console.log("App", app);
+  console.log(firebaseConfig);
+  const analytics = getAnalytics(app);
+  } catch (e) {
+    console.log(e);
+  }
+</script>
   <base href="$FLUTTER_BASE_HREF">
 
-  <meta name="google-signin-client_id" content="920194212184-jpqpj7lbu25lo4ekrv02etair451l3d3.apps.googleusercontent.com">
-
+  <meta name="google-signin-client_id" content="920194212184-19v6i05h9f8ghh6fgrg343lqbal7elsp.apps.googleusercontent.com">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
@@ -26,16 +56,19 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="attendanceapp">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="icons/coffeebeans.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="coffeebeans.png"/>
 
   <title>attendanceapp</title>
   <link rel="manifest" href="manifest.json">
 
   <script src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@9.0.0/dist/dbr.js"></script>
   <script src="https://yushulx.me/javascript-barcode-qr-code-scanner/dbr-scanner-wrapper.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
 
   <script>
     // The value below is injected by flutter build, do not touch.
@@ -45,8 +78,6 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
-
-
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
