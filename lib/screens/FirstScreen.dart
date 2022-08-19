@@ -131,15 +131,22 @@ class FirstScreenState extends State<FirstScreen> {
       if (permission == LocationPermission.denied) {
         print("permission denied by user");
         showDialog(context: context, builder: (BuildContext context)=>_buildlocationPopupDialog(context));
-
         return Future.error('Location permissions are denied');
       }
-
+      if (permission == LocationPermission.denied) {
+        print("permission denied by user");
+        showDialog(context: context, builder: (BuildContext context)=>_buildlocationPopupDialog(context));
+        return Future.error('Location permissions are denied');
+      }
     }
-    if (permission == LocationPermission.deniedForever) {
+     if (permission == LocationPermission.deniedForever) {
+      print("permission denied by user");
+      showDialog(context: context, builder: (BuildContext context)=>_buildlocationPopupDialog(context));
+      permission = await Geolocator.requestPermission();
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
+
     return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
   }
@@ -164,13 +171,12 @@ class FirstScreenState extends State<FirstScreen> {
         children: <Widget>[
 
           Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 10),
               child: Text("Permission required",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w700,color: Color(0xFF553205)),)),
           Container(
             margin: EdgeInsets.only(top: 16),
-            child: Text("Please allow location access for marking your attendance accurately..",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)
+            child: Text("Please allow location access for marking your attendance accurately.",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)
           ),
-
           Container(
               margin: EdgeInsets.only(top: 16),
             child: ElevatedButton(
@@ -182,6 +188,8 @@ class FirstScreenState extends State<FirstScreen> {
               onPressed: () async{
                 Navigator.of(context).pop();
                 permission = await Geolocator.requestPermission();
+
+
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,

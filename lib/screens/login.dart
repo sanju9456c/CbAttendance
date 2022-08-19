@@ -165,10 +165,12 @@ class _SignInDemoState extends State<SignInDemo> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+
         children: <Widget>[
 
           Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 10),
               child: Text("Please Continue with Coffeebeans GmailID",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)),
           Container(
               margin: EdgeInsets.only(top: 16),
@@ -183,7 +185,7 @@ class _SignInDemoState extends State<SignInDemo> {
               // Navigator.of(context).pop();
               Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignInDemo()));
             },
-            child: Text("close",style: TextStyle(color: Colors.blue),)
+            child: Text("close",style: TextStyle(color: Colors.brown),)
           // child: const Text('Close'),
 
         ),

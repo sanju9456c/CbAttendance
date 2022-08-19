@@ -33,6 +33,7 @@ class _SplashState extends State<Splash> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset('assets/coffeebeans.png',height: 130,),
             const SizedBox(height: 130,),
