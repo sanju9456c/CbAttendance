@@ -25,8 +25,7 @@ class _SignInDemoState extends State<SignInDemo> {
   GoogleSignInAccount _currentUser;
 
 
-  String location = 'Null, Press Button';
-  String Address = 'search';
+
   final String assetName = 'assets/Vector.svg';
   @override
   void initState() {
@@ -62,10 +61,7 @@ class _SignInDemoState extends State<SignInDemo> {
         else {
           if(_currentUser.email.toLowerCase().endsWith('@coffeebeans.io')) {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>FirstScreen()));
-            Position position = await _getGeoLocationPosition();
-            location =
-            'Lat: ${position.latitude} , Long: ${position.longitude}';
-            GetAddressFromLatLong(position);
+
           }
           else {
             showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
@@ -89,7 +85,6 @@ class _SignInDemoState extends State<SignInDemo> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   Container(
                       margin: EdgeInsets.only(top: 150),
                       child: Image.asset('assets/logo.png', height: 120,)
@@ -148,43 +143,6 @@ class _SignInDemoState extends State<SignInDemo> {
       );
     }
   }
-  Future<Position> _getGeoLocationPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        print("permission denied by user");
-        return showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
-
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-  }
-
-  Future<void> GetAddressFromLatLong(Position position) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
-    print(placemarks);
-    Placemark place = placemarks[0];
-    Address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place
-        .postalCode}, ${place.country}';
-    setState(() {});
-  }
 
 
   Future<void> _handleSignIn() async {
@@ -211,7 +169,7 @@ class _SignInDemoState extends State<SignInDemo> {
 
           Container(
               margin: EdgeInsets.only(top: 20),
-              child: Text("Login with coffeebeans Gmail ID",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w900,color: Color(0xFF553205)),)),
+              child: Text("Please Continue with Coffeebeans GmailID",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)),
           Container(
               margin: EdgeInsets.only(top: 16),
               // child: Text("Please allow location access for marking your attendance accurately.",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)),
@@ -220,16 +178,19 @@ class _SignInDemoState extends State<SignInDemo> {
       ),
       actions: <Widget>[
         ElevatedButton(
-          onPressed: () async {
-            // Navigator.of(context).pop();
-            Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignInDemo()));
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+            onPressed: () {
+              // Navigator.of(context).pop();
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignInDemo()));
+            },
+            child: Text("close",style: TextStyle(color: Colors.blue),)
+          // child: const Text('Close'),
 
-          },
-          child: const Text('Close'),
         ),
       ],
     );
   }
+
 
 
 

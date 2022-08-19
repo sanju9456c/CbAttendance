@@ -398,18 +398,13 @@ class _ScanScreenState extends State<ScanScreen>  {
       setState(() {
         _data = jsonEncode(response.body.toString());
         print("api data is: "+_data.toString());
-
       });
       return "Success";
-
     }
     catch(error) {
       print(error);
     }
-
   }
-
-
   Future <void>scanQr()async{
     try {
       var res = await Navigator.push(
@@ -423,37 +418,40 @@ class _ScanScreenState extends State<ScanScreen>  {
           print("reading value is $res");
         }
       });
+      print("qrcode data is "+_data.toString());
+      print("camera reading value is  res : $res");
+      print("camera reading value is  result : $result");
 
-        print("qrcode data is "+_data.toString());
+      if(result=="-1") {
+        print("camera reading value is  res : $res");
+        print("camera reading value is  result : $result");
+        failqrcode=false;
+        Text(qrstr=" ");
+      }
+      else if (result == null) {
+        print("camera reading value is  res value is null  : $res");
+        print("camera reading value is  result value is null : $result");
+        failqrcode=false;
+        Text(qrstr=" ");
 
-        if(result=="-1") {
-          failqrcode=false;
-          Text(qrstr=" ");
-        }
-        else if(result==_data) {
-          print("main qrcode string");
+      }
+      else if(result==_data) {
+        print("main qrcode string");
+        scanButtonDisable=false;
+        scanImageDisable=true;
+        failqrcode=false;
+        Text(qrstr=" ");
+        // scanImageDisable=!scanImageDisable;
+      }
+      else if(result!=_data) {
+        await _fetchPost();
+        print("update string value");
+        print("new api string :"+_data);
+        if(result==_data){
           scanButtonDisable=false;
           scanImageDisable=true;
           failqrcode=false;
           Text(qrstr=" ");
-          // scanImageDisable=!scanImageDisable;
-        }
-        else if(result!=_data) {
-          await _fetchPost();
-          print("update string value");
-          print("new api string :"+_data);
-          if(result==_data){
-            scanButtonDisable=false;
-            scanImageDisable=true;
-            failqrcode=false;
-            Text(qrstr=" ");
-
-          }
-          else {
-            Text(qrstr="Invalid QR. Please retry.");
-            submitButtonDisable=false;
-            failqrcode=true;
-          }
         }
         else {
           Text(qrstr="Invalid QR. Please retry.");
@@ -461,7 +459,13 @@ class _ScanScreenState extends State<ScanScreen>  {
           failqrcode=true;
         }
       }
-    catch(e){
+      else {
+        Text(qrstr="Invalid QR. Please retry.");
+        submitButtonDisable=false;
+        failqrcode=true;
+      }
+    }
+    catch(e) {
       print(e);
       setState(() {
         qrstr='unable to read this';
