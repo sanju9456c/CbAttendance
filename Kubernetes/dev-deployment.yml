@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cbattendence
+  labels:
+    name: webapp
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      name: cbat
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: cbattendencecontainer
+        image: registrycoffeebeans.azurecr.io/cbattendance:1.0.0
+        ports:
+        - name: ports
+          containerPort: 80
+          
+apiVersion: v1
+kind: Service
+metadata:
+  name: cbattendenceservice
+  labels:
+    name: webapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: webapp
+  ports:
+  - port: 80
+    targetPort: 80
