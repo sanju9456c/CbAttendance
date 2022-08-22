@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,13 +107,13 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-    int windowWidth = window.innerWidth;
+
     print("screen size is : $screenSize");
-    print("window width $windowWidth");
+
     return Scaffold(
       body: Center(
         child: Container(
-          width: windowWidth.toDouble(),
+
           child: Stack(
             children: [
               Positioned(
