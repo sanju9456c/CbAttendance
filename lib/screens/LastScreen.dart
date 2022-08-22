@@ -30,14 +30,15 @@ class LastScreenState extends State<LastScreen> {
           ),
           Positioned.fill(
             left: 85,
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-
+                  margin:EdgeInsets.only(top: 200) ,
                     child: Image.asset('assets/big-check.png',height: 80,width: 80,)),
                 Container(
-                  margin: EdgeInsets.only(top: 24),
+                  margin: EdgeInsets.only(top: 16),
                   child: Text('Attendance marked',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontFamily: 'Montserrat',color: const Color(0xFF553205),
