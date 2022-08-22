@@ -1,11 +1,7 @@
 import 'dart:convert';
-import 'package:attendanceapp/main.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:async';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,7 +46,6 @@ class _SignInDemoState extends State<SignInDemo> {
   }
   @override
   Widget build(BuildContext context) {
-
     print('name is $_currentUser');
     if(_currentUser!=null) {
       readStoreData().then((value) async {
@@ -73,17 +68,21 @@ class _SignInDemoState extends State<SignInDemo> {
 
     else {
       return Scaffold(
-        body: Stack(
+        body:Stack(
           children: [
-            Positioned.fill(child: Image(
-              image: AssetImage("assets/loginpage.jpg"),
-              fit: BoxFit.cover,
+            Positioned.fill(
+              child: Container(
+                child: Image(
+                image: AssetImage("assets/loginpage.jpg"),
+                fit: BoxFit.cover,
+              ),
             ),
             ),
-            Positioned(
+            Positioned.fill(
               left: 30,
+
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                       margin: EdgeInsets.only(top: 150),
@@ -100,6 +99,7 @@ class _SignInDemoState extends State<SignInDemo> {
                         color: const Color(0xFFFFFFFF),
 
                       ),),
+
                   ),
 
                   Container(
@@ -162,30 +162,30 @@ class _SignInDemoState extends State<SignInDemo> {
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
+
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-
         children: <Widget>[
 
           Container(
-              margin: EdgeInsets.only(top: 10),
-              child: Text("Please Continue with Coffeebeans GmailID",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)),
-          Container(
-              margin: EdgeInsets.only(top: 16),
-              // child: Text("Please allow location access for marking your attendance accurately.",style: TextStyle(fontSize: 18,fontStyle: FontStyle.normal,fontWeight: FontWeight.w500,color: Color(0xFF553205)),)),
-          ),
+              margin: EdgeInsets.only(top: 20),
+              child: Text("Please Login With Coffeebeans GmailId.",
+                style: TextStyle(fontSize: 18,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF553205)),)),
+
         ],
       ),
       actions: <Widget>[
         ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
             onPressed: () {
-              // Navigator.of(context).pop();
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SignInDemo()));
+              Navigator.of(context).pop();
             },
-            child: Text("close",style: TextStyle(color: Colors.brown),)
+
+            child: Text("close", style: TextStyle(color: Colors.blue),)
           // child: const Text('Close'),
 
         ),

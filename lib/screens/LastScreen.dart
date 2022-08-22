@@ -15,24 +15,26 @@ class LastScreenState extends State<LastScreen> {
   Widget build(BuildContext context) {
 //
     return Scaffold(
-      body: Stack(
+      body: Center(
+        child: Column(
         children: [
-          Positioned(
+          Positioned.fill(
             top: 30,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                     child: Image.asset('assets/shelf2.png')),
               ],
             ),
           ),
-          Positioned(
+          Positioned.fill(
             left: 85,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    margin: EdgeInsets.only(top: 300,),
+
                     child: Image.asset('assets/big-check.png',height: 80,width: 80,)),
                 Container(
                   margin: EdgeInsets.only(top: 24),
@@ -50,6 +52,7 @@ class LastScreenState extends State<LastScreen> {
             ),
           ),
         ],
+        ),
       ),
     );
   }
