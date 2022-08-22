@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cbattendence
+  namespace: dev-1
   labels:
     name: webapp
 spec:
@@ -28,6 +29,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cbattendenceservice
+  namespace: dev-1
   labels:
     name: webapp
 spec:
