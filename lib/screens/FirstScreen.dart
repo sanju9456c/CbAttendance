@@ -174,8 +174,6 @@ class FirstScreenState extends State<FirstScreen> {
               onPressed: () async{
                 Navigator.of(context).pop();
                 permission = await Geolocator.requestPermission();
-
-
               },
               child: Row(
                 mainAxisSize: MainAxisSize.min,

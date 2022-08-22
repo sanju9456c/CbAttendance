@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -106,327 +107,318 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    int windowWidth = window.innerWidth;
+    print("screen size is : $screenSize");
+    print("window width $windowWidth");
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: 30,
-            child: Column(
-              children: [
-                Container(
-                    margin: EdgeInsets.only(),
-                    child: Image.asset('assets/shelf2.png', height: 140,)),
-              ],
-            ),
-          ),
-          Positioned(
-            left: 30,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 250),
-                  child: Text('Check in', style: TextStyle(fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF553205)),),
+      body: Center(
+        child: Container(
+          width: windowWidth.toDouble(),
+          child: Stack(
+            children: [
+              Positioned(
+                child: Column(
+                  children: [
+                    Container(
+                        child: Image.asset('assets/shelf2.png', height: 140,)),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Positioned(
-            left: 30,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 310),
-                  child: Text('Record your body temperature', style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                    color: const Color(0xFF553205),
-                  ),),
-                )
-              ],
-            ),
-          ),
-
-          Positioned(
-            left: 30,
-            width: 150,
-            child: Container(
-              margin: EdgeInsets.only(top: 350,),
-              child: TextField(
-                  controller: Textcontroller,
-
-                  style: TextStyle(fontSize: 16,
-                      height: 1,
-                      fontWeight: FontWeight.bold,
-                      color: const Color(0xFF553205)),
-
-                  decoration:
-                  InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Color(0xFF553205), width: 3),
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: const Color(0xFF553205), width: 3),
-                    ),
-                    prefixText: "\t",
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text("°F", style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700,
-                          color: const Color(0xFFCAB9A3)),),
-                    ),
-                  ),
-                  onSubmitted: (String value) {
-                    if (double.parse(value) >= 90 &&
-                        double.parse(value) < 100) {
-                      checkboxImageDisable = true;
-                      hightemp = false;
-                      print("check range temperature");
-                    }
-                    else if (double.parse(value) > 100) {
-                      checkboxImageDisable = false;
-                      showDialog(context: context,
-                          builder: (BuildContext context) =>
-                              _buildPopupDialog(context));
-                    }
-                    else {
-                      print("check temperature out of range");
-                      showDialog(context: context,
-                          builder: (BuildContext context) =>
-                              _buildPopupDialog(context));
-                    }
-                  },
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-
-                  onChanged: (String value) {
-                    try {
-                      if (Textcontroller.text.isEmpty) {
-                        checkboxImageDisable = false;
-                        hightemp = false;
-                      }
-                      else
-                      if (int.parse(value) >= 90 && int.parse(value) < 100) {
-                        checkboxImageDisable = true;
-                        hightemp = false;
-                        print("check range temperature");
-                      }
-                      else if (int.parse(value) > 100) {
-                        checkboxImageDisable = false;
-                        // showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
-
-                      }
-                      // // else if(int.parse(value)<90) {
-                      // //   checkboxImageDisable=false;
-                      // //   showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
-                      // //
-                      // // }
-                    }
-                    catch (e) {}
-                  }
-
               ),
-            ),
-          ),
-
-          // textfeild check image
-          Positioned(
-            left: 190,
-            child: Column(
-              children: [
-                GestureDetector(
-                  child: Visibility(
-                    visible: checkboxImageDisable,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 360),
-                      child: Image(
-                          image: Image
-                              .asset("assets/small-check.png")
-                              .image
-                      ),
+              Positioned(
+                left: 30,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 250),
+                      child: Text('Check in', style: TextStyle(fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF553205)),),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+              Positioned(
+                left: 30,
+                child: Column(
+                  children: [
+                    Container(
 
-          //out of range temp value
-          Positioned(
-            left: 190,
-            child: Column(
-              children: [
-                GestureDetector(
-                  child: Visibility(
-                    visible: hightemp,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 360),
-                      child: Image(
-                          image: Image
-                              .asset("assets/fail.png")
-                              .image
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Positioned(
-            left: 30,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 430),
-                  child: Text('Scan the QR code at the entrance',
-                      style: TextStyle(
+                      margin: EdgeInsets.only(top: 310),
+                      child: Text('Record your body temperature', style: TextStyle(
                         fontFamily: 'Montserrat',
                         fontStyle: FontStyle.normal,
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
                         color: const Color(0xFF553205),
-                      )),
-                )
-              ],
-            ),
-          ),
-          Positioned(
-            left: 30,
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 470),
-                  child:
-                  // ElevatedButton(
-                  //   onPressed: ()  {
-                  //     // var res = await Navigator.push(
-                  //     //     context,
-                  //     //     MaterialPageRoute(
-                  //     //       builder: (context) => const SimpleBarcodeScannerPage(),
-                  //     //     ));
-                  //     // setState(() {
-                  //     //   if (res is String) {
-                  //     //     result = res;
-                  //     //     print("reading value is $result");
-                  //     //   }
-                  //     // });
-                  //   },
-                  //   child: const Text('Open Scanner'),
-                  // ),
+                      ),),
+                    )
+                  ],
+                ),
+              ),
 
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFFE9CFAB),
-                        fixedSize: const Size(150, 50),
-                        onSurface: const Color.fromRGBO(255, 179, 102, 1),
+              Positioned(
+                left: 30,
+                width: 150,
+                child: Container(
+                  margin: EdgeInsets.only(top: 350,),
+                  child: TextField(
+                      controller: Textcontroller,
+
+                      style: TextStyle(fontSize: 16,
+                          height: 1,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF553205)),
+
+                      decoration:
+                      InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color(0xFF553205), width: 3),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: const BorderSide(
+                              color: const Color(0xFF553205), width: 3),
+                        ),
+                        prefixText: "\t",
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text("°F", style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w700,
+                              color: const Color(0xFFCAB9A3)),),
+                        ),
                       ),
-                      onPressed: scanButtonDisable ? () {
-                        setState(() => scanButtonDisable = true);
-                        _fetchPost();
-                        scanQr();
-                      } : null,
+                      onSubmitted: (String value) {
+                        if (double.parse(value) >= 90 &&
+                            double.parse(value) < 100) {
+                          checkboxImageDisable = true;
+                          hightemp = false;
+                          print("check range temperature");
+                        }
+                        else if (double.parse(value) > 100) {
+                          checkboxImageDisable = false;
+                          showDialog(context: context,
+                              builder: (BuildContext context) =>
+                                  _buildPopupDialog(context));
+                        }
+                        else {
+                          print("check temperature out of range");
+                          showDialog(context: context,
+                              builder: (BuildContext context) =>
+                                  _buildPopupDialog(context));
+                        }
+                      },
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+
+                      onChanged: (String value) {
+                        try {
+                          if (Textcontroller.text.isEmpty) {
+                            checkboxImageDisable = false;
+                            hightemp = false;
+                          }
+                          else
+                          if (int.parse(value) >= 90 && int.parse(value) < 100) {
+                            checkboxImageDisable = true;
+                            hightemp = false;
+                            print("check range temperature");
+                          }
+                          else if (int.parse(value) > 100) {
+                            checkboxImageDisable = false;
+                            // showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
+
+                          }
+                          // // else if(int.parse(value)<90) {
+                          // //   checkboxImageDisable=false;
+                          // //   showDialog(context: context, builder: (BuildContext context)=>_buildPopupDialog(context));
+                          // //
+                          // // }
+                        }
+                        catch (e) {}
+                      }
+
+                  ),
+                ),
+              ),
+
+              // textfeild check image
+              Positioned(
+                left: 190,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Visibility(
+                        visible: checkboxImageDisable,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 360),
+                          child: Image(
+                              image: Image
+                                  .asset("assets/small-check.png")
+                                  .image
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              //out of range temp value
+              Positioned(
+                left: 190,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Visibility(
+                        visible: hightemp,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 360),
+                          child: Image(
+                              image: Image
+                                  .asset("assets/fail.png")
+                                  .image
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Positioned(
+                left: 30,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 430),
+                      child: Text('Scan the QR code at the entrance',
+                          style: TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: const Color(0xFF553205),
+                          )),
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                left: 30,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(top: 470),
                       child:
-                      Text(scanButtonDisable ? ('SCAN') : ('SCANNED'),
-                        style: TextStyle(fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                          color: scanButtonDisable
-                              ? const Color(0xFF654113)
-                              : const Color(0xFFC0A17A),),)
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // scan check image
-          Positioned(
-            left: 190,
-            child: Column(
-              children: [
-                GestureDetector(
-                  child: Visibility(
-                    visible: scanImageDisable,
-                    child: Container(
-                      margin: EdgeInsets.only(top: 480),
-                      child: Image(
-                        image: Image
-                            .asset("assets/small-check.png")
-                            .image,
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: const Color(0xFFE9CFAB),
+                            fixedSize: const Size(150, 50),
+                            onSurface: const Color.fromRGBO(255, 179, 102, 1),
+                          ),
+                          onPressed: scanButtonDisable ? () {
+                            setState(() => scanButtonDisable = true);
+                            _fetchPost();
+                            scanQr();
+                          } : null,
+                          child:
+                          Text(scanButtonDisable ? ('SCAN') : ('SCANNED'),
+                            style: TextStyle(fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: scanButtonDisable
+                                  ? const Color(0xFF654113)
+                                  : const Color(0xFFC0A17A),),)
                       ),
                     ),
-                  ),
-
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
 
-          Positioned(
-            top: 490,
-            left: 190,
-            child: Column(
-              children: [
-                GestureDetector(
-                  child: Visibility(
-                    visible: failqrcode,
-                    child: Image(
-                      image: Image
-                          .asset("assets/fail.png")
-                          .image,
+              // scan check image
+              Positioned(
+                left: 190,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Visibility(
+                        visible: scanImageDisable,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 480),
+                          child: Image(
+                            image: Image
+                                .asset("assets/small-check.png")
+                                .image,
+                          ),
+                        ),
+                      ),
+
                     ),
-                  ),
-
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
 
-          Positioned(
-            top: 490,
-            left: 210,
-            child: Column(
-              children: [
-                Text(qrstr, style: TextStyle(color: const Color(0xFF553205),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400),),
-              ],
-            ),
-          ),
-          Positioned(
-            top: 570,
-            left: 30,
-            child: Column(
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Color(0xFF422501),
-                    fixedSize: const Size(340, 50),),
-                  onPressed: (checkboxImageDisable && scanImageDisable)
-                      ? () async {
-                    setState(() => submitButtonDisable = false);
-                    await saveAttendanceData();
-                    await saveTodayDate();
-                    Navigator.pushAndRemoveUntil(context,
-                        MaterialPageRoute(builder: (context) => LastScreen()), (
-                            route) => false);
-                  }
-                      : null,
-                  child: Text("DONE", style: TextStyle(fontFamily: 'Montserrat',
-                      fontStyle: FontStyle.normal,
-                      color: const Color(0xFFF6EEE3),
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16),),
+              Positioned(
+                top: 490,
+                left: 190,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      child: Visibility(
+                        visible: failqrcode,
+                        child: Image(
+                          image: Image
+                              .asset("assets/fail.png")
+                              .image,
+                        ),
+                      ),
+
+                    ),
+                  ],
                 ),
+              ),
 
-              ],
-            ),
+              Positioned(
+                top: 490,
+                left: 210,
+                child: Column(
+                  children: [
+                    Text(qrstr, style: TextStyle(color: const Color(0xFF553205),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400),),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 570,
+                left: 30,
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Color(0xFF422501),
+                        fixedSize: const Size(340, 50),),
+                      onPressed: (checkboxImageDisable && scanImageDisable)
+                          ? () async {
+                        setState(() => submitButtonDisable = false);
+                        await saveAttendanceData();
+                        await saveTodayDate();
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (context) => LastScreen()), (
+                                route) => false);
+                      }
+                          : null,
+                      child: Text("DONE", style: TextStyle(fontFamily: 'Montserrat',
+                          fontStyle: FontStyle.normal,
+                          color: const Color(0xFFF6EEE3),
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16),),
+                    ),
+
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
